@@ -26,7 +26,7 @@ extern "C" {
  * \return Zero on success, non-zero on error.
  */
     OpenCDMError opencdm_gstreamer_session_decrypt(struct OpenCDMSession* session, GstBuffer* buffer, GstBuffer* subSample, const uint32_t subSampleCount,
-                                                   GstBuffer* IV, GstBuffer* keyID, uint32_t initWithLast15);
+                                                   GstBuffer* IV, GstBuffer* keyID, uint32_t initWithLast15, GstBuffer* decBuffer);
 
 #ifdef __cplusplus
 }

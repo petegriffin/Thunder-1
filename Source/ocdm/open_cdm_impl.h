@@ -4,6 +4,9 @@
 #include "IOCDM.h"
 #include "Module.h"
 #include "open_cdm.h"
+#include "helper/socket_client_helper.h"
+
+#define ENABLE_SECURE_DATA_PATH 1
 
 using namespace WPEFramework;
 
@@ -310,6 +313,7 @@ private:
     static OpenCDMAccessor* _singleton;
 };
 
+
 struct OpenCDMSession {
 private:
     using KeyStatusesMap = std::list<OCDM::KeyId>;
@@ -376,6 +380,13 @@ private:
 
             TRACE_L1("Constructing buffer client side: %p - %s", this,
                 bufferName.c_str());
+
+#ifdef ENABLE_SECURE_DATA_PATH
+            TRACE_L1("Connect to socket (for SDP)");
+            if(_socket.Connect(0) != 0) {
+                TRACE_L1("Cannot connect to OCDM plugin (for SDP)");
+            }
+#endif
         }
         virtual ~DataExchange()
         {
@@ -390,7 +401,9 @@ private:
         uint32_t Decrypt(uint8_t* encryptedData, uint32_t encryptedDataLength,
             const uint8_t* ivData, uint16_t ivDataLength,
             const uint8_t* keyId, uint16_t keyIdLength,
-            uint32_t initWithLast15 /* = 0 */)
+            uint32_t initWithLast15 /* = 0 */,
+            uint32_t *subSampleMapping, const uint32_t subSampleCount,
+            int secureFd, uint32_t secureSize)
         {
             int ret = 0;
 
@@ -414,6 +427,11 @@ private:
                 InitWithLast15(initWithLast15);
                 Write(encryptedDataLength, encryptedData);
 
+#ifdef ENABLE_SECURE_DATA_PATH
+                if(_socket.SendFileDescriptor(secureFd, secureSize) != 0) {
+                    TRACE_L1("Cannot send secure file descriptor");
+                }
+#endif
                 // This will trigger the OpenCDMIServer to decrypt this memory...
                 Produced();
 
@@ -426,7 +444,7 @@ private:
 
                     // Get the status of the last decrypt.
                     ret = Status();
-
+                    
                     // And free the lock, for the next production Scenario..
                     Consumed();
                 }
@@ -441,6 +459,9 @@ private:
 
     private:
         bool _busy;
+#ifdef ENABLE_SECURE_DATA_PATH
+        SocketClient _socket; /* Used to send the secure file descriptor to the OCDM plugin */
+#endif
     };
 
 public:
@@ -577,13 +598,15 @@ public:
     uint32_t Decrypt(uint8_t* encryptedData, const uint32_t encryptedDataLength,
         const uint8_t* ivData, uint16_t ivDataLength,
         const uint8_t* keyId, const uint16_t keyIdLength,
-        uint32_t initWithLast15)
+        uint32_t initWithLast15,
+        uint32_t *subSampleMapping, const uint32_t subSampleCount,
+        int secureFd, uint32_t secureSize)
     {
         uint32_t result = OpenCDMError::ERROR_INVALID_DECRYPT_BUFFER;
         if (_decryptSession != nullptr) {
             result = _decryptSession->Decrypt(encryptedData, encryptedDataLength, ivData,
                 ivDataLength, keyId, keyIdLength,
-                initWithLast15);
+                initWithLast15, subSampleMapping, subSampleCount, secureFd, secureSize);
             if(result)
             {
                 TRACE_L1("Decrypt() failed with return code: %x", result);

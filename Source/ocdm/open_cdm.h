@@ -474,14 +474,18 @@ EXTERNAL OpenCDMError opencdm_session_decrypt(struct OpenCDMSession* session,
     const uint32_t encryptedLength,
     const uint8_t* IV, uint16_t IVLength,
     const uint8_t* keyId, const uint16_t keyIdLength,
-    uint32_t initWithLast15 = 0);
+    uint32_t initWithLast15 = 0,
+    uint32_t *subSampleMapping = NULL, const uint32_t subSampleCount = 0,
+    int secureFd = -1, uint32_t secureSize = 0);
 #else
 EXTERNAL OpenCDMError opencdm_session_decrypt(struct OpenCDMSession* session,
     uint8_t encrypted[],
     const uint32_t encryptedLength,
     const uint8_t* IV, uint16_t IVLength,
     const uint8_t* keyId, const uint16_t keyIdLength,
-    uint32_t initWithLast15);
+    uint32_t initWithLast15,
+    uint32_t *subSampleMapping, const uint32_t subSampleCount,
+    int secureFd, uint32_t secureSize);
 #endif // __cplusplus
 
 #ifdef __cplusplus

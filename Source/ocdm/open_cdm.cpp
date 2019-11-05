@@ -91,7 +91,7 @@ KeyStatus CDMState(const OCDM::ISession::KeyStatus state)
 }
 
 /* static */ OpenCDMAccessor* OpenCDMAccessor::_singleton = nullptr;
-
+ 
 /**
  * Destructs an \ref OpenCDMAccessor instance.
  * \param system \ref OpenCDMAccessor instance to desctruct.
@@ -451,13 +451,15 @@ OpenCDMError opencdm_session_decrypt(struct OpenCDMSession* session,
     const uint32_t encryptedLength,
     const uint8_t* IV, const uint16_t IVLength,
     const uint8_t* keyId, const uint16_t keyIdLength,
-    uint32_t initWithLast15 /* = 0 */)
+    uint32_t initWithLast15 /* = 0 */,
+    uint32_t *subSampleMapping, const uint32_t subSampleCount,
+    int secureFd, uint32_t secureSize)
 {
     OpenCDMError result(ERROR_INVALID_SESSION);
 
     if (session != nullptr) {
         result = encryptedLength > 0 ? static_cast<OpenCDMError>(session->Decrypt(
-            encrypted, encryptedLength, IV, IVLength, keyId, keyIdLength, initWithLast15)) : ERROR_NONE;
+            encrypted, encryptedLength, IV, IVLength, keyId, keyIdLength, initWithLast15, subSampleMapping, subSampleCount, secureFd, secureSize)) : ERROR_NONE;
     }
 
     return (result);
