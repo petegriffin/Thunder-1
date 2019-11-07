@@ -17,6 +17,7 @@ set(PUBLIC_HEADERS
         adapter/open_cdm_adapter.h
         open_cdm_ext.h
         Module.h
+        helper/socket_client_helper.h
         )
 
 target_link_libraries(${TARGET}
@@ -49,6 +50,7 @@ else()
 endif ()
 
 target_sources(${TARGET} PRIVATE adapter/${CDMI_ADAPTER_IMPLEMENTATION}/open_cdm_adapter.cpp)
+target_sources(${TARGET} PRIVATE helper/socket_client_helper.cpp)
 
 find_package(GSTREAMER REQUIRED)
 find_package(GSTREAMER_BASE REQUIRED)
