@@ -111,6 +111,16 @@ public:
         const Administration* admin = reinterpret_cast<const Administration*>(AdministrationBuffer());
         return (admin->IVLength);
     }
+    const uint8_t* SubSampleData() const
+    {
+        const Administration* admin = reinterpret_cast<const Administration*>(AdministrationBuffer());
+        return (admin->Sub);
+    }
+    const uint8_t SubSampleDataLength() const
+    {
+        const Administration* admin = reinterpret_cast<const Administration*>(AdministrationBuffer());
+        return (admin->SubLength);
+    }
     void KeyId(const uint8_t length, const uint8_t buffer[])
     {
         Administration* admin = reinterpret_cast<Administration*>(AdministrationBuffer());
@@ -120,6 +130,7 @@ public:
             ::memcpy(&(admin->KeyId[1]), buffer, admin->KeyId[0]);
         }
     }
+
     const uint8_t* KeyId(uint8_t& length) const
     {
         const Administration* admin = reinterpret_cast<const Administration*>(AdministrationBuffer());

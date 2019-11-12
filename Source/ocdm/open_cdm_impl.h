@@ -409,7 +409,7 @@ private:
             if (RequestProduce(WPEFramework::Core::infinite) == WPEFramework::Core::ERROR_NONE) {
 
                 SetIV(static_cast<uint8_t>(ivDataLength), ivData);
-                SetSubSampleData(0, nullptr);
+                SetSubSampleData(static_cast<uint16_t>(subSampleCount * sizeof(uint32_t)), (uint8_t *)subSampleMapping);
                 KeyId(static_cast<uint8_t>(keyIdLength), keyId);
                 InitWithLast15(initWithLast15);
                 Write(encryptedDataLength, encryptedData);
