@@ -11,7 +11,7 @@ OpenCDMError opencdm_gstreamer_session_decrypt(struct OpenCDMSession* session, G
 
     if (session != nullptr) {
         GstMapInfo dataMap;
-        if (gst_buffer_map(buffer, &dataMap, (GstMapFlags) GST_MAP_READWRITE) == false) {
+        if (gst_buffer_map(buffer, &dataMap, (GstMapFlags) GST_MAP_READ) == false) {
             printf("Invalid buffer.\n");
             return (ERROR_INVALID_DECRYPT_BUFFER);
         }
