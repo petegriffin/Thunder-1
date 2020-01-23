@@ -182,15 +182,19 @@ static const struct wl_pointer_listener pointerListener = {
     // pointerMotion
     [](void* data, struct wl_pointer* pointer, uint32_t time, wl_fixed_t sx, wl_fixed_t sy) {
         int x, y;
+        Wayland::Display& context = *(static_cast<Wayland::Display*>(data));
 
         x = wl_fixed_to_int(sx);
         y = wl_fixed_to_int(sy);
 
         Trace("wl_pointer_listener.pointerMotion [%d,%d]\n", x, y);
+        context.PointerXY(x, y);
     },
     // pointerButton
     [](void* data, struct wl_pointer* pointer, uint32_t serial, uint32_t time, uint32_t button, uint32_t state) {
+        Wayland::Display& context = *(static_cast<Wayland::Display*>(data));
         Trace("wl_pointer_listener.pointerButton [%u,%u]\n", button, state);
+        context.PointerButton(button, static_cast<Wayland::Display::IPointer::state>(state));
     },
     // pointerAxis
     [](void* data, struct wl_pointer* pointer, uint32_t time, uint32_t axis, wl_fixed_t value) {
