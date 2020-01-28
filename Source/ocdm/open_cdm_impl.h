@@ -6,8 +6,6 @@
 #include "open_cdm.h"
 #include "helper/socket_client_helper.h"
 
-#define ENABLE_SECURE_DATA_PATH 1
-
 using namespace WPEFramework;
 
 extern Core::CriticalSection _systemLock;

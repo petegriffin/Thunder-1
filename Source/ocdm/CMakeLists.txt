@@ -86,6 +86,10 @@ if (${CDMI_ADAPTER_IMPLEMENTATION} STREQUAL "broadcom-svp")
             )
 endif()
 
+if("${SECURE_DATA_PATH}" STREQUAL "ON")
+    add_definitions(-DENABLE_SECURE_DATA_PATH=1)
+endif()
+
 set_target_properties(${TARGET} PROPERTIES
         CXX_STANDARD 11
         CXX_STANDARD_REQUIRED YES
