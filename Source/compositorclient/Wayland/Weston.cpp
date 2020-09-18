@@ -186,7 +186,7 @@ static const struct wl_pointer_listener pointerListener = {
         x = wl_fixed_to_int(sx);
         y = wl_fixed_to_int(sy);
 
-        Trace("wl_pointer_listener.pointerMotion [%d,%d]\n", x, y);
+        //Trace("wl_pointer_listener.pointerMotion [%d,%d]\n", x, y);
         context.PointerXY(x, y);
     },
     // pointerButton
