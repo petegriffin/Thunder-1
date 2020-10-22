@@ -404,7 +404,7 @@ namespace Wayland {
 
             wl_region_destroy(region);
 
-            Trace("Creating a surface of size: %d x %d\n", width, height);
+            Trace("Creating a surface of size: %d x %d _surface=%p\n", width, height, _surface);
 
             _native = wl_egl_window_create(_surface, width, height);
 
@@ -926,8 +926,7 @@ namespace Wayland {
         _collect |= true;
     }
 
-
-    Compositor::IDisplay::ISurface* Display::Create(const std::string& name, const uint32_t width, const uint32_t height)
+  Compositor::IDisplay::ISurface* Display::Create(const std::string& name, const uint32_t width, const uint32_t height)
     {
         IDisplay::ISurface* result = nullptr;
 
